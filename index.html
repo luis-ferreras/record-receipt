@@ -54,7 +54,7 @@
     /* Receipt paper */
     .receipt {
       background: #f5f0e8;
-      width: 320px;
+      width: 400px;
       padding: 30px 24px;
       position: relative;
       box-shadow:
@@ -325,11 +325,11 @@
         const { event, summary } = item;
         const competition = event.competitions[0];
 
-        for (const competitor of competition.competitors) {
-          const opponent = competition.competitors.find(
-            c => c.id !== competitor.id
-          );
-          const receipt = buildReceipt(event, competitor, opponent, summary);
+        // Only create a receipt for the winning team
+        const winner = competition.competitors.find(c => c.winner);
+        if (winner) {
+          const opponent = competition.competitors.find(c => c.id !== winner.id);
+          const receipt = buildReceipt(event, winner, opponent, summary);
           container.appendChild(receipt);
         }
       }
@@ -432,8 +432,8 @@
           <span>${teamScore.toFixed(2)}</span>
         </div>
 
-        <div class="receipt-result ${won ? 'win' : 'loss'}">
-          ${won ? 'W' : 'L'} ${teamScore} - ${opponentScore}
+        <div class="receipt-result win">
+          W ${teamScore} - ${opponentScore}
         </div>
 
         <hr class="receipt-divider">
