@@ -191,26 +191,19 @@
       margin-bottom: 10px;
     }
 
-    .receipt-barcode-link {
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 1px;
-      height: 40px;
+    .receipt-qr-link {
+      display: inline-block;
       margin-bottom: 8px;
-      text-decoration: none;
-      cursor: pointer;
       opacity: 0.9;
       transition: opacity 0.2s;
     }
 
-    .receipt-barcode-link:hover {
+    .receipt-qr-link:hover {
       opacity: 0.6;
     }
 
-    .receipt-barcode .bar {
-      background: #222;
-      height: 100%;
+    .receipt-qr-link img {
+      display: block;
     }
 
     .receipt-retain {
@@ -254,6 +247,7 @@
     .receipt-result.win { color: #222; }
     .receipt-result.loss { color: #999; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -401,8 +395,12 @@
           </div>`;
       }
 
-      // Generate barcode
-      const barcodeHTML = generateBarcode(event.id + team.team.id);
+      // Generate QR code
+      const gameUrl = `https://www.espn.com/nba/game/_/gameId/${event.id}`;
+      const qr = qrcode(0, 'M');
+      qr.addData(gameUrl);
+      qr.make();
+      const qrImgTag = qr.createImgTag(3, 0);
 
       el.innerHTML = `
         <div class="receipt-header">
@@ -448,36 +446,12 @@
 
         <div class="receipt-footer">
           <div class="receipt-thanks">Thank You For Dining!</div>
-          <a class="receipt-barcode-link" href="https://www.espn.com/nba/game/_/gameId/${event.id}" target="_blank" rel="noopener">${barcodeHTML}</a>
+          <a class="receipt-qr-link" href="${gameUrl}" target="_blank" rel="noopener">${qrImgTag}</a>
           <div class="receipt-retain">Scan For Full Box Score</div>
         </div>
       `;
 
       return el;
-    }
-
-    function generateBarcode(seed) {
-      // Generate a pseudo-random barcode pattern from the seed string
-      let hash = 0;
-      for (let i = 0; i < seed.length; i++) {
-        hash = ((hash << 5) - hash) + seed.charCodeAt(i);
-        hash |= 0;
-      }
-
-      let html = '';
-      const widths = [1, 1, 2, 1, 2, 3, 1, 2, 1, 1, 3, 1, 2, 1, 1, 2, 1, 3, 1, 1,
-                      2, 1, 1, 3, 1, 2, 1, 1, 2, 1, 3, 1, 1, 2, 1, 2, 1, 1, 3, 1,
-                      1, 2, 1, 1, 2, 3, 1, 1, 2, 1];
-
-      for (let i = 0; i < widths.length; i++) {
-        const w = widths[(i + Math.abs(hash)) % widths.length];
-        if (i % 2 === 0) {
-          html += `<div class="bar" style="width:${w}px"></div>`;
-        } else {
-          html += `<div style="width:${w}px"></div>`;
-        }
-      }
-      return html;
     }
 
     init();
