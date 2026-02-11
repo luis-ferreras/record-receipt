@@ -191,13 +191,21 @@
       margin-bottom: 10px;
     }
 
-    .receipt-barcode {
+    .receipt-barcode-link {
       display: flex;
       justify-content: center;
       align-items: flex-end;
       gap: 1px;
       height: 40px;
       margin-bottom: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+
+    .receipt-barcode-link:hover {
+      opacity: 0.6;
     }
 
     .receipt-barcode .bar {
@@ -440,8 +448,8 @@
 
         <div class="receipt-footer">
           <div class="receipt-thanks">Thank You For Dining!</div>
-          <div class="receipt-barcode">${barcodeHTML}</div>
-          <div class="receipt-retain">Retain This Copy For Your Records</div>
+          <a class="receipt-barcode-link" href="https://www.espn.com/nba/game/_/gameId/${event.id}" target="_blank" rel="noopener">${barcodeHTML}</a>
+          <div class="receipt-retain">Scan For Full Box Score</div>
         </div>
       `;
 
