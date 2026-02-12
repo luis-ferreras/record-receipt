@@ -206,8 +206,8 @@ body {
 .receipt-slide {
   position: relative;
   z-index: 1;
-  /* Start hidden behind the printer — negative margin pulls it up under the SVG */
-  margin-top: -2.5rem;
+  /* Pull receipt up so its top edge aligns with the paper slot in the SVG */
+  margin-top: -55%;
   max-height: none;
   transform: translateY(-100%);
 }
