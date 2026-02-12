@@ -155,12 +155,12 @@ body {
 }
 
 .key-name {
-  font-size: 0.6875rem;
+  font-size: 1.25rem;
   pointer-events: none;
 }
 
 .key-score {
-  font-size: 0.875rem;
+  font-size: 1.125rem;
   color: var(--color-faded);
   pointer-events: none;
 }
@@ -435,11 +435,11 @@ body {
   }
 
   .key-name {
-    font-size: 0.8125rem;
+    font-size: 1rem;
   }
 
   .key-score {
-    font-size: 0.6875rem;
+    font-size: 0.875rem;
   }
 
   .receipt-overlay {
