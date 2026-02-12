@@ -265,12 +265,10 @@ body {
 
 .receipt-team-name {
   font-size: var(--text-base);
-  letter-spacing: 0.125rem;
   text-transform: uppercase;
 }
 
 .receipt-tagline {
-  letter-spacing: 0.03125rem;
   text-transform: uppercase;
 }
 
@@ -282,7 +280,6 @@ body {
 
 .receipt-order {
   font-size: var(--text-base);
-  letter-spacing: 0.0625rem;
 }
 
 .receipt-datetime {
@@ -415,7 +412,6 @@ body {
 
   .page-title {
     font-size: var(--text-sm);
-    letter-spacing: 0.125rem;
   }
 
   .keyboard {
