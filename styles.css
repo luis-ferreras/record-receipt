@@ -251,7 +251,7 @@ body {
 
 .receipt-header {
   text-align: center;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-7);
 }
 
 .receipt-logo {
@@ -332,7 +332,7 @@ body {
 
 .receipt-footer {
   text-align: center;
-  margin-top: var(--space-5);
+  margin-top: var(--space-7);
 }
 
 .receipt-thanks {
