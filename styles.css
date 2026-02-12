@@ -1,9 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+@font-face {
+  font-family: 'Merchant Copy';
+  src: url('Merchant Copy.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* Fonts */
-  --font-mono: 'Courier New', Courier, monospace;
-  --font-display: 'Special Elite', 'Courier New', monospace;
+  --font-mono: 'Merchant Copy', 'Courier New', Courier, monospace;
+  --font-display: 'Merchant Copy', 'Courier New', monospace;
 
   /* Colors */
   --color-bg: #1a1a1a;
