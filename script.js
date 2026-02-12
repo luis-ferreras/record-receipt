@@ -3,80 +3,17 @@ const API_BASE = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba';
 // Store receipts keyed by team id
 const receiptStore = {};
 
-// Thermal printer sound effect using Web Audio API
-let printerAudioCtx = null;
-let printerSoundSource = null;
+// Printer sound effect
+const printerAudio = new Audio('receipt-printer.mp3');
 
 function playPrinterSound() {
-  stopPrinterSound();
-
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  printerAudioCtx = ctx;
-
-  const duration = 3; // match animation duration
-  const sampleRate = ctx.sampleRate;
-  const length = sampleRate * duration;
-  const buffer = ctx.createBuffer(1, length, sampleRate);
-  const data = buffer.getChannelData(0);
-
-  // Generate choppy thermal printer noise: short bursts of buzz with pauses
-  const burstLen = Math.floor(sampleRate * 0.12);  // ~120ms bursts
-  const pauseLen = Math.floor(sampleRate * 0.06);   // ~60ms pauses
-  const cycleLen = burstLen + pauseLen;
-
-  for (let i = 0; i < length; i++) {
-    const posInCycle = i % cycleLen;
-    if (posInCycle < burstLen) {
-      // Buzzy noise: mix of noise + low-freq square wave for motor rumble
-      const noise = (Math.random() * 2 - 1) * 0.3;
-      const buzz = ((i % 80) < 40 ? 1 : -1) * 0.15;
-      data[i] = (noise + buzz) * 0.5;
-    } else {
-      // Brief silence between bursts (with tiny residual noise)
-      data[i] = (Math.random() * 2 - 1) * 0.02;
-    }
-  }
-
-  // Fade out the last 0.3s
-  const fadeStart = length - Math.floor(sampleRate * 0.3);
-  for (let i = fadeStart; i < length; i++) {
-    data[i] *= (length - i) / (length - fadeStart);
-  }
-
-  const source = ctx.createBufferSource();
-  source.buffer = buffer;
-
-  // Filter to sound more muffled/mechanical
-  const filter = ctx.createBiquadFilter();
-  filter.type = 'lowpass';
-  filter.frequency.value = 2000;
-
-  const gain = ctx.createGain();
-  gain.gain.value = 0.4;
-
-  source.connect(filter);
-  filter.connect(gain);
-  gain.connect(ctx.destination);
-
-  source.start();
-  printerSoundSource = source;
-
-  source.onended = () => {
-    ctx.close();
-    printerAudioCtx = null;
-    printerSoundSource = null;
-  };
+  printerAudio.currentTime = 0;
+  printerAudio.play();
 }
 
 function stopPrinterSound() {
-  if (printerSoundSource) {
-    try { printerSoundSource.stop(); } catch {}
-    printerSoundSource = null;
-  }
-  if (printerAudioCtx) {
-    try { printerAudioCtx.close(); } catch {}
-    printerAudioCtx = null;
-  }
+  printerAudio.pause();
+  printerAudio.currentTime = 0;
 }
 
 function formatDateStr(date) {
