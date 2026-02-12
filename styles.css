@@ -210,21 +210,6 @@ body {
   box-shadow:
     0 0.25rem 0.375rem rgba(0, 0, 0, 0.3),
     0 0.625rem 2.5rem rgba(0, 0, 0, 0.4);
-  /* Torn edge effect at bottom */
-  -webkit-mask-image: linear-gradient(to bottom,
-    #000 calc(100% - 0.75rem),
-    transparent calc(100% - 0.75rem)),
-    url("data:image/svg+xml,%3Csvg width='320' height='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,12 Q4,0 8,12 Q12,0 16,12 Q20,0 24,12 Q28,0 32,12 Q36,0 40,12 Q44,0 48,12 Q52,0 56,12 Q60,0 64,12 Q68,0 72,12 Q76,0 80,12 Q84,0 88,12 Q92,0 96,12 Q100,0 104,12 Q108,0 112,12 Q116,0 120,12 Q124,0 128,12 Q132,0 136,12 Q140,0 144,12 Q148,0 152,12 Q156,0 160,12 Q164,0 168,12 Q172,0 176,12 Q180,0 184,12 Q188,0 192,12 Q196,0 200,12 Q204,0 208,12 Q212,0 216,12 Q220,0 224,12 Q228,0 232,12 Q236,0 240,12 Q244,0 248,12 Q252,0 256,12 Q260,0 264,12 Q268,0 272,12 Q276,0 280,12 Q284,0 288,12 Q292,0 296,12 Q300,0 304,12 Q308,0 312,12 Q316,0 320,12' fill='%23000'/%3E%3C/svg%3E");
-  -webkit-mask-position: bottom;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-composite: source-over;
-  mask-image: linear-gradient(to bottom,
-    #000 calc(100% - 0.75rem),
-    transparent calc(100% - 0.75rem)),
-    url("data:image/svg+xml,%3Csvg width='320' height='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,12 Q4,0 8,12 Q12,0 16,12 Q20,0 24,12 Q28,0 32,12 Q36,0 40,12 Q44,0 48,12 Q52,0 56,12 Q60,0 64,12 Q68,0 72,12 Q76,0 80,12 Q84,0 88,12 Q92,0 96,12 Q100,0 104,12 Q108,0 112,12 Q116,0 120,12 Q124,0 128,12 Q132,0 136,12 Q140,0 144,12 Q148,0 152,12 Q156,0 160,12 Q164,0 168,12 Q172,0 176,12 Q180,0 184,12 Q188,0 192,12 Q196,0 200,12 Q204,0 208,12 Q212,0 216,12 Q220,0 224,12 Q228,0 232,12 Q236,0 240,12 Q244,0 248,12 Q252,0 256,12 Q260,0 264,12 Q268,0 272,12 Q276,0 280,12 Q284,0 288,12 Q292,0 296,12 Q300,0 304,12 Q308,0 312,12 Q316,0 320,12' fill='%23000'/%3E%3C/svg%3E");
-  mask-position: bottom;
-  mask-repeat: no-repeat;
-  mask-composite: add;
   color: var(--color-ink);
   font-size: var(--text-base);
   line-height: 1.5;
