@@ -228,8 +228,6 @@ function buildReceipt(event, team, opponent, summary) {
       <div class="receipt-tagline">Everyone Eats</div>
     </div>
 
-    <hr class="receipt-divider">
-
     <div class="receipt-order">ORDER #${orderNum} FOR ${opponent.team.shortDisplayName.toUpperCase()}</div>
     <div class="receipt-datetime">${dateFormatted} ${timeFormatted}</div>
 
@@ -250,8 +248,6 @@ function buildReceipt(event, team, opponent, summary) {
       </div>
     </div>
 
-    <hr class="receipt-divider">
-
     <div class="receipt-total-line">
       <span>TOTAL</span>
       <span>${teamScore.toFixed(2)}</span>
@@ -260,8 +256,6 @@ function buildReceipt(event, team, opponent, summary) {
     <div class="receipt-result win">
       W ${teamScore} - ${opponentScore}
     </div>
-
-    <hr class="receipt-divider">
 
     <div class="receipt-footer">
       <div class="receipt-thanks">Thank You For Dining!</div>
