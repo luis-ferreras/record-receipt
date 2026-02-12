@@ -183,14 +183,38 @@ body {
 
 .receipt-slide {
   transform: translateY(100%);
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   max-height: 90vh;
   overflow-y: auto;
   padding-bottom: 2rem;
 }
 
 .receipt-overlay.visible .receipt-slide {
-  transform: translateY(0);
+  animation: receipt-print 1.4s steps(18, end) forwards;
+}
+
+@keyframes receipt-print {
+  0%   { transform: translateY(100%); }
+  6%   { transform: translateY(88%); }
+  10%  { transform: translateY(88%); }
+  16%  { transform: translateY(74%); }
+  20%  { transform: translateY(74%); }
+  26%  { transform: translateY(60%); }
+  28%  { transform: translateY(60%); }
+  34%  { transform: translateY(48%); }
+  36%  { transform: translateY(48%); }
+  42%  { transform: translateY(36%); }
+  44%  { transform: translateY(36%); }
+  50%  { transform: translateY(26%); }
+  52%  { transform: translateY(26%); }
+  58%  { transform: translateY(18%); }
+  60%  { transform: translateY(18%); }
+  68%  { transform: translateY(10%); }
+  70%  { transform: translateY(10%); }
+  80%  { transform: translateY(4%); }
+  84%  { transform: translateY(4%); }
+  92%  { transform: translateY(1%); }
+  96%  { transform: translateY(1%); }
+  100% { transform: translateY(0); }
 }
 
 .receipts-container {
