@@ -87,8 +87,7 @@ body {
 .receipt {
   background: var(--color-paper);
   width: var(--receipt-width);
-  padding: var(--receipt-padding);
-  padding-bottom: var(--space-7);
+  padding: var(--space-7) var(--receipt-padding);
   position: relative;
   box-shadow:
     0 0.25rem 0.375rem rgba(0, 0, 0, 0.3),
@@ -128,8 +127,8 @@ body {
 }
 
 .receipt-logo {
-  width: 4rem;
-  height: 4rem;
+  width: 8rem;
+  height: 8rem;
   margin: 0 auto var(--space-3);
   display: block;
   filter: grayscale(100%) contrast(1.5);
