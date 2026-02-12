@@ -23,7 +23,7 @@
   /* Type scale */
   --text-xs: 0.625rem;
   --text-sm: 0.75rem;
-  --text-base: 0.8125rem;
+  --text-base: 1.25rem;
   --text-lg: 1rem;
 
   /* Spacing */
@@ -156,7 +156,6 @@ body {
 
 .key-name {
   font-size: 0.6875rem;
-  font-weight: 700;
   letter-spacing: 0.0625rem;
   text-transform: uppercase;
   pointer-events: none;
@@ -268,7 +267,6 @@ body {
 
 .receipt-team-name {
   font-size: var(--text-base);
-  font-weight: 700;
   letter-spacing: 0.125rem;
   text-transform: uppercase;
   margin-bottom: var(--space-1);
@@ -290,7 +288,6 @@ body {
 .receipt-order {
   text-align: center;
   font-size: var(--text-base);
-  font-weight: 700;
   letter-spacing: 0.0625rem;
 }
 
@@ -316,7 +313,6 @@ body {
 
 .receipt-player-pts {
   white-space: nowrap;
-  font-weight: 600;
   padding-left: var(--space-3);
 }
 
@@ -334,14 +330,12 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: var(--text-lg);
-  font-weight: 900;
   letter-spacing: 0.0625rem;
 }
 
 .receipt-result {
   text-align: center;
   font-size: var(--text-sm);
-  font-weight: 700;
   letter-spacing: 0.125rem;
   text-transform: uppercase;
   margin-bottom: var(--space-1);
@@ -357,7 +351,6 @@ body {
 
 .receipt-thanks {
   font-size: var(--text-base);
-  font-weight: 700;
   letter-spacing: 0.125rem;
   text-transform: uppercase;
   margin-bottom: var(--space-5);
