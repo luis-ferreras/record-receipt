@@ -30,7 +30,7 @@
   --space-7: 2.5rem;
 
   /* Receipt */
-  --receipt-width: 25rem;
+  --receipt-width: 35rem;
   --receipt-padding: 1.5rem;
 }
 
@@ -78,10 +78,9 @@ body {
 
 .receipts-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap: var(--space-7);
-  max-width: 75rem;
 }
 
 /* Receipt paper */
