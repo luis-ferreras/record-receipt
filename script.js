@@ -1,5 +1,8 @@
 const API_BASE = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba';
 
+// Store receipts keyed by team id
+const receiptStore = {};
+
 function formatDateStr(date) {
   return date.getFullYear()
     + String(date.getMonth() + 1).padStart(2, '0')
@@ -22,7 +25,6 @@ async function init() {
   yesterday.setDate(yesterday.getDate() - 1);
 
   try {
-    // Fetch today's and yesterday's games in parallel
     const [todayGames, yesterdayGames] = await Promise.all([
       fetchGamesForDate(formatDateStr(today)),
       fetchGamesForDate(formatDateStr(yesterday))
@@ -33,29 +35,18 @@ async function init() {
       return;
     }
 
-    let html = '';
-    if (yesterdayGames.length > 0) {
-      html += `<div class="date-label">Yesterday</div><div class="receipts-container" id="receipts-yesterday"></div>`;
-    }
-    if (todayGames.length > 0) {
-      html += `<div class="date-label">Today</div><div class="receipts-container" id="receipts-today"></div>`;
-    }
-    content.innerHTML = html;
+    // Fetch all box scores and build receipts in memory
+    const allGames = [...yesterdayGames, ...todayGames];
+    await loadAllReceipts(allGames);
 
-    // Load box scores and render receipts for both days in parallel
-    await Promise.all([
-      renderReceipts(yesterdayGames, 'receipts-yesterday'),
-      renderReceipts(todayGames, 'receipts-today')
-    ]);
+    // Build the keyboard UI
+    renderKeyboard(yesterdayGames, todayGames);
   } catch (err) {
     content.innerHTML = `<div class="no-games">Failed to load games: ${err.message}</div>`;
   }
 }
 
-async function renderReceipts(games, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container || games.length === 0) return;
-
+async function loadAllReceipts(games) {
   const summaries = await Promise.all(
     games.map(async (event) => {
       try {
@@ -70,16 +61,107 @@ async function renderReceipts(games, containerId) {
     if (!item) continue;
     const { event, summary } = item;
     const competition = event.competitions[0];
-
-    // Only create a receipt for the winning team
     const winner = competition.competitors.find(c => c.winner);
     if (winner) {
       const opponent = competition.competitors.find(c => c.id !== winner.id);
-      const receipt = buildReceipt(event, winner, opponent, summary);
-      container.appendChild(receipt);
+      const receiptEl = buildReceipt(event, winner, opponent, summary);
+      receiptStore[winner.team.id] = {
+        el: receiptEl,
+        teamName: winner.team.shortDisplayName,
+        teamLogo: winner.team.logo,
+        teamAbbrev: winner.team.abbreviation,
+        score: `${winner.score}-${opponent.score}`,
+        opponentAbbrev: opponent.team.abbreviation
+      };
     }
   }
 }
+
+function renderKeyboard(yesterdayGames, todayGames) {
+  const content = document.getElementById('content');
+  let html = '';
+
+  if (yesterdayGames.length > 0) {
+    const yesterdayKeys = getWinnerKeys(yesterdayGames);
+    if (yesterdayKeys.length > 0) {
+      html += `<div class="date-label">Yesterday</div>`;
+      html += `<div class="keyboard">${yesterdayKeys.map(buildKey).join('')}</div>`;
+    }
+  }
+
+  if (todayGames.length > 0) {
+    const todayKeys = getWinnerKeys(todayGames);
+    if (todayKeys.length > 0) {
+      html += `<div class="date-label">Today</div>`;
+      html += `<div class="keyboard">${todayKeys.map(buildKey).join('')}</div>`;
+    }
+  }
+
+  content.innerHTML = html;
+}
+
+function getWinnerKeys(games) {
+  const keys = [];
+  for (const event of games) {
+    const competition = event.competitions[0];
+    const winner = competition.competitors.find(c => c.winner);
+    if (winner && receiptStore[winner.team.id]) {
+      keys.push(receiptStore[winner.team.id]);
+    }
+  }
+  return keys;
+}
+
+function buildKey(team) {
+  return `
+    <button class="key" onclick="showReceipt('${team.teamAbbrev}')" data-team-id="${team.teamAbbrev}">
+      <img class="key-logo" src="${team.teamLogo}" alt="${team.teamName}">
+      <span class="key-name">${team.teamAbbrev}</span>
+      <span class="key-score">${team.score}</span>
+    </button>`;
+}
+
+function showReceipt(abbrev) {
+  const entry = Object.values(receiptStore).find(r => r.teamAbbrev === abbrev);
+  if (!entry) return;
+
+  const overlay = document.getElementById('receipt-overlay');
+  const slide = document.getElementById('receipt-slide');
+
+  // Clear previous receipt and insert new one
+  slide.innerHTML = '';
+  const clone = entry.el.cloneNode(true);
+  slide.appendChild(clone);
+
+  // Mark active key
+  document.querySelectorAll('.key').forEach(k => k.classList.remove('key-active'));
+  const activeKey = document.querySelector(`.key[data-team-id="${abbrev}"]`);
+  if (activeKey) activeKey.classList.add('key-active');
+
+  // Show overlay and trigger animation
+  overlay.classList.remove('visible');
+  // Force reflow so removing/re-adding class triggers animation
+  void overlay.offsetHeight;
+  overlay.classList.add('visible');
+}
+
+function closeReceipt() {
+  const overlay = document.getElementById('receipt-overlay');
+  overlay.classList.remove('visible');
+  document.querySelectorAll('.key').forEach(k => k.classList.remove('key-active'));
+}
+
+// Close on overlay background click
+document.getElementById('receipt-overlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) {
+    closeReceipt();
+  }
+});
+
+// Close on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeReceipt();
+});
 
 function buildReceipt(event, team, opponent, summary) {
   const gameDate = new Date(event.date);
@@ -95,7 +177,6 @@ function buildReceipt(event, team, opponent, summary) {
 
   const teamScore = parseInt(team.score);
   const opponentScore = parseInt(opponent.score);
-  const won = teamScore > opponentScore;
 
   // Get player stats from box score
   let players = [];
@@ -122,16 +203,11 @@ function buildReceipt(event, team, opponent, summary) {
   const subtotal = players.reduce((sum, p) => sum + p.pts, 0);
   const bonusBuckets = teamScore - subtotal;
 
-  // Build receipt element
   const el = document.createElement('div');
   el.className = 'receipt';
 
-  // Build line items HTML
   let lineItemsHTML = '';
   for (const p of players) {
-    const dots = '.'.repeat(Math.max(1,
-      38 - p.name.length - p.pts.toFixed(2).length
-    ));
     lineItemsHTML += `
       <div class="receipt-line-item">
         <span class="receipt-player-name">${p.name.toUpperCase()}</span>
@@ -139,7 +215,6 @@ function buildReceipt(event, team, opponent, summary) {
       </div>`;
   }
 
-  // Generate QR code
   const gameUrl = `https://www.espn.com/nba/game/_/gameId/${event.id}`;
   const qr = qrcode(0, 'M');
   qr.addData(gameUrl);
