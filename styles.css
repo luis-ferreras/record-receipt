@@ -71,7 +71,7 @@ body {
   padding-bottom: 40px;
   color: #222;
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 /* Subtle paper texture noise */
@@ -135,7 +135,6 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 13px;
-  line-height: 1.8;
 }
 
 .receipt-player-name {
@@ -159,7 +158,6 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 13px;
-  line-height: 1.8;
 }
 
 .receipt-total-line {
@@ -167,7 +165,6 @@ body {
   justify-content: space-between;
   font-size: 16px;
   font-weight: 900;
-  line-height: 2;
   letter-spacing: 1px;
 }
 
