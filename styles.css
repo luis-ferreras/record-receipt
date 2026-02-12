@@ -191,7 +191,7 @@ body {
 }
 
 .receipt-overlay.visible .receipt-slide {
-  animation: receipt-print 1.4s steps(18, end) forwards;
+  animation: receipt-print 3s steps(18, end) forwards;
 }
 
 @keyframes receipt-print {
