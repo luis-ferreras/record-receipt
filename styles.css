@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #1a1a1a;
+  font-family: 'Courier New', Courier, monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+.page-title {
+  color: #666;
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 14px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
+
+.no-games {
+  color: #666;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 60px;
+}
+
+.loading {
+  color: #666;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  margin-top: 60px;
+}
+
+.receipts-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  max-width: 1200px;
+}
+
+/* Receipt paper */
+.receipt {
+  background: #fff;
+  width: 400px;
+  padding: 30px 24px;
+  position: relative;
+  box-shadow:
+    0 4px 6px rgba(0,0,0,0.3),
+    0 10px 40px rgba(0,0,0,0.4);
+  /* Torn edge effect at bottom */
+  -webkit-mask-image: linear-gradient(to bottom,
+    #000 calc(100% - 12px),
+    transparent calc(100% - 12px)),
+    url("data:image/svg+xml,%3Csvg width='320' height='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,12 Q4,0 8,12 Q12,0 16,12 Q20,0 24,12 Q28,0 32,12 Q36,0 40,12 Q44,0 48,12 Q52,0 56,12 Q60,0 64,12 Q68,0 72,12 Q76,0 80,12 Q84,0 88,12 Q92,0 96,12 Q100,0 104,12 Q108,0 112,12 Q116,0 120,12 Q124,0 128,12 Q132,0 136,12 Q140,0 144,12 Q148,0 152,12 Q156,0 160,12 Q164,0 168,12 Q172,0 176,12 Q180,0 184,12 Q188,0 192,12 Q196,0 200,12 Q204,0 208,12 Q212,0 216,12 Q220,0 224,12 Q228,0 232,12 Q236,0 240,12 Q244,0 248,12 Q252,0 256,12 Q260,0 264,12 Q268,0 272,12 Q276,0 280,12 Q284,0 288,12 Q292,0 296,12 Q300,0 304,12 Q308,0 312,12 Q316,0 320,12' fill='%23000'/%3E%3C/svg%3E");
+  -webkit-mask-position: bottom;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-composite: source-over;
+  mask-image: linear-gradient(to bottom,
+    #000 calc(100% - 12px),
+    transparent calc(100% - 12px)),
+    url("data:image/svg+xml,%3Csvg width='320' height='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,12 Q4,0 8,12 Q12,0 16,12 Q20,0 24,12 Q28,0 32,12 Q36,0 40,12 Q44,0 48,12 Q52,0 56,12 Q60,0 64,12 Q68,0 72,12 Q76,0 80,12 Q84,0 88,12 Q92,0 96,12 Q100,0 104,12 Q108,0 112,12 Q116,0 120,12 Q124,0 128,12 Q132,0 136,12 Q140,0 144,12 Q148,0 152,12 Q156,0 160,12 Q164,0 168,12 Q172,0 176,12 Q180,0 184,12 Q188,0 192,12 Q196,0 200,12 Q204,0 208,12 Q212,0 216,12 Q220,0 224,12 Q228,0 232,12 Q236,0 240,12 Q244,0 248,12 Q252,0 256,12 Q260,0 264,12 Q268,0 272,12 Q276,0 280,12 Q284,0 288,12 Q292,0 296,12 Q300,0 304,12 Q308,0 312,12 Q316,0 320,12' fill='%23000'/%3E%3C/svg%3E");
+  mask-position: bottom;
+  mask-repeat: no-repeat;
+  mask-composite: add;
+  padding-bottom: 40px;
+  color: #222;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Subtle paper texture noise */
+.receipt::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.receipt-logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 8px;
+  display: block;
+  filter: grayscale(100%) contrast(1.5);
+}
+
+.receipt-team-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.receipt-tagline {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.receipt-divider {
+  border: none;
+  border-top: 2px dashed #aaa;
+  margin: 12px 0;
+}
+
+.receipt-order {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.receipt-datetime {
+  text-align: center;
+  font-size: 12px;
+  color: #444;
+  margin-top: 2px;
+}
+
+.receipt-line-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.receipt-player-name {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.receipt-player-pts {
+  white-space: nowrap;
+  font-weight: 600;
+  padding-left: 8px;
+}
+
+.receipt-summary {
+  margin-top: 4px;
+}
+
+.receipt-summary-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.receipt-total-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 2;
+  letter-spacing: 1px;
+}
+
+.receipt-footer {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.receipt-thanks {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.receipt-qr-link {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.receipt-qr-link img {
+  display: block;
+}
+
+.receipt-retain {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.date-label {
+  color: #888;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  margin: 30px 0 16px;
+}
+
+.date-label:first-child {
+  margin-top: 0;
+}
+
+.receipt-score-context {
+  text-align: center;
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.receipt-result {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.receipt-result.win { color: #222; }
+.receipt-result.loss { color: #999; }
