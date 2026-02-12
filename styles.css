@@ -50,14 +50,14 @@ body {
   align-items: center;
   padding: var(--space-7) 1.25rem;
   min-height: 100vh;
+  letter-spacing: 0.03125rem;
+  text-transform: uppercase;
 }
 
 .page-title {
   color: var(--color-muted);
   font-family: var(--font-display);
   font-size: var(--text-base);
-  letter-spacing: 0.03125rem
-  text-transform: uppercase;
   margin-bottom: var(--space-6);
 }
 
@@ -156,8 +156,6 @@ body {
 
 .key-name {
   font-size: 0.6875rem;
-  letter-spacing: 0.0625rem;
-  text-transform: uppercase;
   pointer-events: none;
 }
 
@@ -271,7 +269,7 @@ body {
 }
 
 .receipt-tagline {
-  letter-spacing: 0.03125rem
+  letter-spacing: 0.03125rem;
   text-transform: uppercase;
 }
 
@@ -298,8 +296,6 @@ body {
 }
 
 .receipt-player-name {
-  text-transform: uppercase;
-  letter-spacing: 0.03125rem;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -323,14 +319,11 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: var(--text-lg);
-  letter-spacing: 0.0625rem;
 }
 
 .receipt-result {
   text-align: center;
   font-size: var(--text-sm);
-  letter-spacing: 0.125rem;
-  text-transform: uppercase;
   margin-bottom: var(--space-1);
 }
 
@@ -344,8 +337,6 @@ body {
 
 .receipt-thanks {
   font-size: var(--text-base);
-  letter-spacing: 0.125rem;
-  text-transform: uppercase;
   margin-bottom: var(--space-5);
 }
 
@@ -360,8 +351,6 @@ body {
 
 .receipt-retain {
   font-size: var(--text-xs);
-  letter-spacing: 0.125rem;
-  text-transform: uppercase;
   color: var(--color-faded);
 }
 
@@ -376,8 +365,6 @@ body {
   color: var(--color-faded);
   font-family: var(--font-mono);
   font-size: var(--text-base);
-  letter-spacing: 0.03125rem
-  text-transform: uppercase;
   text-align: center;
   width: 100%;
   margin: var(--space-6) 0 var(--space-5);
