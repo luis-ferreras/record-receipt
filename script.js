@@ -68,13 +68,17 @@ async function loadAllReceipts(games) {
     if (winner) {
       const opponent = competition.competitors.find(c => c.id !== winner.id);
       const receiptEl = buildReceipt(event, winner, opponent, summary);
-      receiptStore[winner.team.id] = {
+      const gameDate = new Date(event.date);
+      const orderNum = String(gameDate.getMonth() + 1).padStart(2, '0')
+        + String(gameDate.getDate()).padStart(2, '0');
+      receiptStore[winner.team.abbreviation + '-' + orderNum] = {
         el: receiptEl,
         teamName: winner.team.shortDisplayName,
         teamLogo: winner.team.logo,
         teamAbbrev: winner.team.abbreviation,
         score: `${winner.score}-${opponent.score}`,
-        opponentAbbrev: opponent.team.abbreviation
+        opponentAbbrev: opponent.team.abbreviation,
+        orderNum
       };
     }
   }
@@ -108,24 +112,29 @@ function getWinnerKeys(games) {
   for (const event of games) {
     const competition = event.competitions[0];
     const winner = competition.competitors.find(c => c.winner);
-    if (winner && receiptStore[winner.team.id]) {
-      keys.push(receiptStore[winner.team.id]);
+    if (winner) {
+      const gameDate = new Date(event.date);
+      const orderNum = String(gameDate.getMonth() + 1).padStart(2, '0')
+        + String(gameDate.getDate()).padStart(2, '0');
+      const key = winner.team.abbreviation + '-' + orderNum;
+      if (receiptStore[key]) keys.push(receiptStore[key]);
     }
   }
   return keys;
 }
 
 function buildKey(team) {
+  const receiptKey = `${team.teamAbbrev}-${team.orderNum}`;
   return `
-    <button class="key" onclick="showReceipt('${team.teamAbbrev}')" data-team-id="${team.teamAbbrev}">
+    <button class="key" onclick="showReceipt('${receiptKey}')" data-team-id="${receiptKey}">
       <img class="key-logo" src="${team.teamLogo}" alt="${team.teamName}">
       <span class="key-name">${team.teamAbbrev}</span>
       <span class="key-score">${team.score}</span>
     </button>`;
 }
 
-function showReceipt(abbrev) {
-  const entry = Object.values(receiptStore).find(r => r.teamAbbrev === abbrev);
+function showReceipt(receiptKey) {
+  const entry = receiptStore[receiptKey];
   if (!entry) return;
 
   const overlay = document.getElementById('receipt-overlay');
@@ -138,11 +147,11 @@ function showReceipt(abbrev) {
 
   // Mark active key
   document.querySelectorAll('.key').forEach(k => k.classList.remove('key-active'));
-  const activeKey = document.querySelector(`.key[data-team-id="${abbrev}"]`);
+  const activeKey = document.querySelector(`.key[data-team-id="${receiptKey}"]`);
   if (activeKey) activeKey.classList.add('key-active');
 
   // Update URL hash
-  history.replaceState(null, '', `#${abbrev}`);
+  history.replaceState(null, '', `#${receiptKey}`);
 
   // Show overlay and trigger animation
   overlay.classList.remove('visible');
@@ -170,10 +179,34 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeReceipt();
 });
 
-// Deep linking via URL hash
-function openFromHash() {
+// Deep linking via URL hash (e.g. #LAL-0211)
+async function openFromHash() {
   const hash = location.hash.slice(1).toUpperCase();
-  if (hash) showReceipt(hash);
+  if (!hash) return;
+
+  // If already in store, just open it
+  if (receiptStore[hash]) {
+    showReceipt(hash);
+    return;
+  }
+
+  // Parse ABBREV-MMDD and fetch that date's games
+  const match = hash.match(/^([A-Z]+)-(\d{2})(\d{2})$/);
+  if (!match) return;
+
+  const [, abbrev, mm, dd] = match;
+  const now = new Date();
+  let year = now.getFullYear();
+  // If the date is in the future, assume previous year (previous season)
+  const candidate = new Date(year, parseInt(mm) - 1, parseInt(dd));
+  if (candidate > now) year--;
+
+  const dateStr = `${year}${mm}${dd}`;
+  try {
+    const games = await fetchGamesForDate(dateStr);
+    if (games.length > 0) await loadAllReceipts(games);
+    if (receiptStore[hash]) showReceipt(hash);
+  } catch { /* silently fail for invalid deep links */ }
 }
 
 window.addEventListener('hashchange', openFromHash);
