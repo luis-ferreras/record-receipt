@@ -178,6 +178,7 @@ body {
   pointer-events: none;
   transition: opacity 0.3s ease;
   overflow-y: auto;
+  padding-top: 0;
 }
 
 .receipt-overlay.visible {
@@ -190,25 +191,24 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 1.5rem;
   width: var(--receipt-width);
   max-width: 100%;
 }
 
-.printer-svg {
-  position: relative;
-  z-index: 2;
+.printer-bar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
   width: 100%;
-  flex-shrink: 0;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  height: 3rem;
+  background: linear-gradient(to bottom, #4a4a4a, #2a2a2a);
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .receipt-slide {
   position: relative;
   z-index: 1;
-  /* Pull receipt up so its top edge aligns with the paper slot in the SVG */
-  margin-top: -55%;
-  max-height: none;
   transform: translateY(-100%);
 }
 
@@ -415,6 +415,11 @@ body {
   .printer-wrapper {
     width: 90vw;
   }
+
+  .printer-bar {
+    position: sticky;
+    top: 0;
+  }
 }
 
 /* Mobile */
@@ -461,7 +466,6 @@ body {
 
   .printer-wrapper {
     width: 100%;
-    margin-top: 0.5rem;
   }
 
   .receipt-logo {
