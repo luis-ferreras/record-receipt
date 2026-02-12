@@ -15,6 +15,7 @@ async function fetchGamesForDate(dateStr) {
 
 async function init() {
   const content = document.getElementById('content');
+  content.innerHTML = '<div class="loading">Loading games...</div>';
 
   const today = new Date();
   const yesterday = new Date(today);
