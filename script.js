@@ -41,6 +41,9 @@ async function init() {
 
     // Build the keyboard UI
     renderKeyboard(yesterdayGames, todayGames);
+
+    // Open receipt from URL hash if present (e.g. #LAL)
+    openFromHash();
   } catch (err) {
     content.innerHTML = `<div class="no-games">Failed to load games: ${err.message}</div>`;
   }
@@ -138,6 +141,9 @@ function showReceipt(abbrev) {
   const activeKey = document.querySelector(`.key[data-team-id="${abbrev}"]`);
   if (activeKey) activeKey.classList.add('key-active');
 
+  // Update URL hash
+  history.replaceState(null, '', `#${abbrev}`);
+
   // Show overlay and trigger animation
   overlay.classList.remove('visible');
   // Force reflow so removing/re-adding class triggers animation
@@ -149,6 +155,7 @@ function closeReceipt() {
   const overlay = document.getElementById('receipt-overlay');
   overlay.classList.remove('visible');
   document.querySelectorAll('.key').forEach(k => k.classList.remove('key-active'));
+  history.replaceState(null, '', location.pathname + location.search);
 }
 
 // Close on overlay background click
@@ -162,6 +169,14 @@ document.getElementById('receipt-overlay').addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeReceipt();
 });
+
+// Deep linking via URL hash
+function openFromHash() {
+  const hash = location.hash.slice(1).toUpperCase();
+  if (hash) showReceipt(hash);
+}
+
+window.addEventListener('hashchange', openFromHash);
 
 function buildReceipt(event, team, opponent, summary) {
   const gameDate = new Date(event.date);
