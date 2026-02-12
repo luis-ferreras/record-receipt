@@ -257,8 +257,6 @@ function buildReceipt(event, team, opponent, summary) {
       W ${teamScore} - ${opponentScore}
     </div>
 
-    <hr class="receipt-divider">
-
     <div class="receipt-footer">
       <div class="receipt-thanks">Thank You For Dining!</div>
       <a class="receipt-qr-link" href="${gameUrl}" target="_blank" rel="noopener">${qrImgTag}</a>
