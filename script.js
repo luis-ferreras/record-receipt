@@ -167,9 +167,9 @@ function closeReceipt() {
   history.replaceState(null, '', location.pathname + location.search);
 }
 
-// Close on overlay background click
+// Close on overlay background click (anywhere outside the receipt paper)
 document.getElementById('receipt-overlay').addEventListener('click', (e) => {
-  if (e.target === e.currentTarget) {
+  if (!e.target.closest('.receipt')) {
     closeReceipt();
   }
 });

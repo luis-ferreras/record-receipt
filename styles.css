@@ -172,11 +172,12 @@ body {
   background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 100;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+  overflow-y: auto;
 }
 
 .receipt-overlay.visible {
@@ -184,10 +185,31 @@ body {
   pointer-events: auto;
 }
 
+.printer-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+  width: var(--receipt-width);
+  max-width: 100%;
+}
+
+.printer-svg {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
 .receipt-slide {
-  transform: translateY(100vh);
-  max-height: 90vh;
-  overflow-y: auto;
+  position: relative;
+  z-index: 1;
+  /* Start hidden behind the printer — negative margin pulls it up under the SVG */
+  margin-top: -2.5rem;
+  max-height: none;
+  transform: translateY(-100%);
 }
 
 .receipt-overlay.visible .receipt-slide {
@@ -195,27 +217,27 @@ body {
 }
 
 @keyframes receipt-print {
-  0%   { transform: translateY(100vh); }
-  6%   { transform: translateY(80vh); }
-  10%  { transform: translateY(80vh); }
-  16%  { transform: translateY(60vh); }
-  20%  { transform: translateY(60vh); }
-  26%  { transform: translateY(44vh); }
-  28%  { transform: translateY(44vh); }
-  34%  { transform: translateY(30vh); }
-  36%  { transform: translateY(30vh); }
-  42%  { transform: translateY(20vh); }
-  44%  { transform: translateY(20vh); }
-  50%  { transform: translateY(12vh); }
-  52%  { transform: translateY(12vh); }
-  58%  { transform: translateY(6vh); }
-  60%  { transform: translateY(6vh); }
-  68%  { transform: translateY(3vh); }
-  70%  { transform: translateY(3vh); }
-  80%  { transform: translateY(1vh); }
-  84%  { transform: translateY(1vh); }
-  92%  { transform: translateY(0.25vh); }
-  96%  { transform: translateY(0.25vh); }
+  0%   { transform: translateY(-100%); }
+  6%   { transform: translateY(-80%); }
+  10%  { transform: translateY(-80%); }
+  16%  { transform: translateY(-60%); }
+  20%  { transform: translateY(-60%); }
+  26%  { transform: translateY(-44%); }
+  28%  { transform: translateY(-44%); }
+  34%  { transform: translateY(-30%); }
+  36%  { transform: translateY(-30%); }
+  42%  { transform: translateY(-20%); }
+  44%  { transform: translateY(-20%); }
+  50%  { transform: translateY(-12%); }
+  52%  { transform: translateY(-12%); }
+  58%  { transform: translateY(-6%); }
+  60%  { transform: translateY(-6%); }
+  68%  { transform: translateY(-3%); }
+  70%  { transform: translateY(-3%); }
+  80%  { transform: translateY(-1%); }
+  84%  { transform: translateY(-1%); }
+  92%  { transform: translateY(0); }
+  96%  { transform: translateY(0); }
   100% { transform: translateY(0); }
 }
 
@@ -390,8 +412,7 @@ body {
     height: 6rem;
   }
 
-  .receipt-slide {
-    max-height: 95vh;
+  .printer-wrapper {
     width: 90vw;
   }
 }
@@ -438,14 +459,9 @@ body {
     font-size: 0.875rem;
   }
 
-  .receipt-overlay {
-    align-items: flex-start;
-    padding: 0.5rem;
-  }
-
-  .receipt-slide {
-    max-height: 100vh;
+  .printer-wrapper {
     width: 100%;
+    margin-top: 0.5rem;
   }
 
   .receipt-logo {
