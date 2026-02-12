@@ -21,10 +21,10 @@
   --color-divider: #aaa;
 
   /* Type scale */
-  --text-xs: 0.625rem;
-  --text-sm: 0.75rem;
-  --text-base: 1.25rem;
-  --text-lg: 1rem;
+  --text-xs: 0.75rem;
+  --text-sm: 1rem;
+  --text-base: 1.5rem;
+  --text-lg: 2rem;
 
   /* Spacing */
   --space-1: 0.125rem;
@@ -239,7 +239,7 @@ body {
     0 0.625rem 2.5rem rgba(0, 0, 0, 0.4);
   color: var(--color-ink);
   font-size: var(--text-base);
-  line-height: 1.5;
+  line-height: 1.125;
 }
 
 /* Subtle paper texture noise */
@@ -272,7 +272,6 @@ body {
 }
 
 .receipt-tagline {
-  font-size: var(--text-sm);
   letter-spacing: 0.1875rem;
   text-transform: uppercase;
   color: var(--color-muted);
@@ -291,8 +290,6 @@ body {
 }
 
 .receipt-datetime {
-  text-align: center;
-  font-size: var(--text-sm);
   color: var(--color-ink-light);
   margin-top: var(--space-1);
 }
