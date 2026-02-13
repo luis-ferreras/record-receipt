@@ -1,0 +1,14 @@
+{
+  "name": "final-tabs-autopost",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Automated Twitter posting for Final Tabs game receipts",
+  "scripts": {
+    "autopost": "node autopost.js",
+    "autopost:dry": "DRY_RUN=true node autopost.js"
+  },
+  "dependencies": {
+    "puppeteer": "^24.0.0",
+    "twitter-api-v2": "^1.18.0"
+  }
+}
