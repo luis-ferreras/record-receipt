@@ -1,10 +1,10 @@
-# The Final Tab
+# Final Tabs
 
-NBA game results served as receipt-style box scores. See who cooked, who got served, and relive every winning performance — one receipt at a time.
+Game results served as receipt-style box scores. See who cooked, who got served, and relive every winning performance — one receipt at a time.
 
 ## What It Does
 
-The Final Tab pulls finished NBA games from the ESPN API and presents each winning team's box score as a stylized receipt. Players who scored 10+ points appear as line items, and standout performances in assists, rebounds, blocks, and steals get restaurant-themed labels like "Table Captain" or "Sent It Back."
+Final Tabs pulls finished games from the ESPN API and presents each winning team's box score as a stylized receipt. Players who scored 10+ points appear as line items, and standout performances in assists, rebounds, blocks, and steals get restaurant-themed labels like "Table Captain" or "Sent It Back."
 
 ### Sections
 
