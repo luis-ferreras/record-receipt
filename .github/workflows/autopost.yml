@@ -34,7 +34,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add autopost-history.json
+          if [ -f autopost-history.json ]; then
+            git add autopost-history.json
+          fi
           if ! git diff --cached --quiet; then
             git commit -m "Update autopost history"
             git push
