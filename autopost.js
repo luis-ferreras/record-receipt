@@ -179,9 +179,7 @@ function composeTweet(receipt) {
   const handle = TEAM_HANDLES[receipt.teamAbbrev] || receipt.teamAbbrev;
   return [
     `${receipt.tagline}`,
-    ``,
-    `${handle} wins ${winScore}-${loseScore}`,
-    ``,
+    `${handle} win ${winScore}-${loseScore}`,
     `#NBA #${receipt.teamAbbrev} #FinalTabs`,
   ].join('\n');
 }
