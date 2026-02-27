@@ -145,15 +145,27 @@ async function postToTwitter(client, receipt) {
   }
 
   // Upload the image
-  const mediaId = await client.v1.uploadMedia(Buffer.from(receipt.image), {
-    mimeType: 'image/png',
-  });
+  let mediaId;
+  try {
+    mediaId = await client.v1.uploadMedia(Buffer.from(receipt.image), {
+      mimeType: 'image/png',
+    });
+    console.log(`  Media uploaded: ${mediaId}`);
+  } catch (uploadErr) {
+    console.error(`  Media upload failed: ${JSON.stringify(uploadErr.data || uploadErr.message)}`);
+    throw uploadErr;
+  }
 
   // Post the tweet with the image
-  await client.v2.tweet({
-    text,
-    media: { media_ids: [mediaId] },
-  });
+  try {
+    await client.v2.tweet({
+      text,
+      media: { media_ids: [mediaId] },
+    });
+  } catch (tweetErr) {
+    console.error(`  Tweet failed: ${JSON.stringify(tweetErr.data || tweetErr.message)}`);
+    throw tweetErr;
+  }
 
   console.log(`  Posted tweet for ${receipt.teamAbbrev}`);
 }
