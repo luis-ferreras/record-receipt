@@ -5,6 +5,40 @@ const puppeteer = require('puppeteer');
 const { TwitterApi } = require('twitter-api-v2');
 
 const HISTORY_FILE = path.join(__dirname, 'autopost-history.json');
+
+// NBA team Twitter/X handles keyed by ESPN abbreviation
+const TEAM_HANDLES = {
+  ATL: '@ATLHawks',
+  BOS: '@celtics',
+  BKN: '@BrooklynNets',
+  CHA: '@hornets',
+  CHI: '@chicagobulls',
+  CLE: '@cavs',
+  DAL: '@dallasmavs',
+  DEN: '@nuggets',
+  DET: '@DetroitPistons',
+  GS: '@warriors',
+  HOU: '@HoustonRockets',
+  IND: '@Pacers',
+  LAC: '@LAClippers',
+  LAL: '@Lakers',
+  MEM: '@memgrizz',
+  MIA: '@MiamiHEAT',
+  MIL: '@Bucks',
+  MIN: '@Timberwolves',
+  NO: '@PelicansNBA',
+  NY: '@nyknicks',
+  OKC: '@OKCThunder',
+  ORL: '@OrlandoMagic',
+  PHI: '@sixers',
+  PHX: '@Suns',
+  POR: '@trailblazers',
+  SAC: '@SacramentoKings',
+  SA: '@spurs',
+  TOR: '@Raptors',
+  UTAH: '@utahjazz',
+  WSH: '@WashWizards',
+};
 const DRY_RUN = process.env.DRY_RUN === 'true';
 const PORT = 9182;
 
@@ -94,11 +128,26 @@ async function captureReceipts(page) {
       document.querySelectorAll('.receipt-line-item, .receipt-line-extra').forEach((el) => {
         el.style.animation = 'none';
         el.style.opacity = '1';
+        el.classList.add('printed');
       });
     });
 
-    // Small wait for styles to apply
-    await new Promise((r) => setTimeout(r, 200));
+    // Wait for all images inside the receipt to fully load
+    await page.evaluate(() => {
+      const receipt = document.querySelector('.receipt');
+      if (!receipt) return;
+      const images = Array.from(receipt.querySelectorAll('img'));
+      return Promise.all(images.map((img) => {
+        if (img.complete) return;
+        return new Promise((resolve) => {
+          img.addEventListener('load', resolve);
+          img.addEventListener('error', resolve);
+        });
+      }));
+    });
+
+    // Wait for rendering to fully complete
+    await new Promise((r) => setTimeout(r, 1000));
 
     // Get the receipt element and its tagline for the tweet
     const tagline = await page.$eval('.receipt .receipt-tagline', (el) => el.textContent);
@@ -117,9 +166,9 @@ async function captureReceipts(page) {
 
     console.log(`  Captured: ${key.name} (${key.score}) - ${tagline}`);
 
-    // Close the receipt
+    // Close the receipt and wait for overlay to fully dismiss
     await page.keyboard.press('Escape');
-    await new Promise((r) => setTimeout(r, 400));
+    await new Promise((r) => setTimeout(r, 800));
   }
 
   return receipts;
@@ -127,11 +176,10 @@ async function captureReceipts(page) {
 
 function composeTweet(receipt) {
   const [winScore, loseScore] = receipt.score.split('-');
+  const handle = TEAM_HANDLES[receipt.teamAbbrev] || receipt.teamAbbrev;
   return [
     `${receipt.tagline}`,
-    ``,
-    `${receipt.teamAbbrev} wins ${winScore}-${loseScore}`,
-    ``,
+    `${handle} win ${winScore}-${loseScore}`,
     `#NBA #${receipt.teamAbbrev} #FinalTabs`,
   ].join('\n');
 }
