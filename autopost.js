@@ -60,7 +60,8 @@ async function captureReceipts(page) {
   // Check if there are any games
   const hasGames = await page.$('.key');
   if (!hasGames) {
-    console.log('No finished games found.');
+    const pageText = await page.$eval('#content', (el) => el.textContent);
+    console.log(`No finished games found. Page shows: "${pageText.trim()}"`);
     return [];
   }
 
@@ -199,6 +200,11 @@ async function main() {
     // Mute audio
     const session = await page.createCDPSession();
     await session.send('Page.setWebLifecycleState', { state: 'active' });
+
+    // Forward browser console and errors to Node for debugging
+    page.on('console', (msg) => console.log(`[BROWSER] ${msg.text()}`));
+    page.on('pageerror', (err) => console.error(`[BROWSER ERROR] ${err.message}`));
+    page.on('requestfailed', (req) => console.error(`[REQUEST FAILED] ${req.url()} - ${req.failure()?.errorText}`));
 
     await page.goto(`http://localhost:${PORT}`, { waitUntil: 'networkidle2' });
 
