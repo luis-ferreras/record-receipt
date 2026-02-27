@@ -67,7 +67,7 @@ function saveHistory(history) {
 
 function startServer() {
   const server = http.createServer((req, res) => {
-    let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : req.url);
+    let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : decodeURIComponent(req.url));
     const ext = path.extname(filePath);
     const mime = MIME_TYPES[ext] || 'application/octet-stream';
 
