@@ -184,6 +184,12 @@ function composeTweet(receipt) {
   ].join('\n');
 }
 
+function isAuthError(err) {
+  const code = err.code || err.data?.detail?.status;
+  const twitterCode = err.data?.errors?.[0]?.code;
+  return code === 401 || code === 403 || twitterCode === 261 || twitterCode === 89;
+}
+
 async function postToTwitter(client, receipt) {
   const text = composeTweet(receipt);
 
@@ -271,12 +277,14 @@ async function main() {
     const receipts = await captureReceipts(page);
 
     let posted = 0;
+    let toPost = 0;
     for (const receipt of receipts) {
       if (history.posted.includes(receipt.id)) {
         console.log(`  Skipping ${receipt.teamAbbrev} (${receipt.id}) - already posted`);
         continue;
       }
 
+      toPost++;
       try {
         await postToTwitter(twitterClient, receipt);
         history.posted.push(receipt.id);
@@ -287,10 +295,19 @@ async function main() {
         if (!DRY_RUN) await new Promise((r) => setTimeout(r, 2000));
       } catch (err) {
         console.error(`  Failed to post ${receipt.teamAbbrev}: ${err.message}`);
+        if (isAuthError(err)) {
+          console.error('\nAuth/permission error detected — skipping remaining posts.');
+          console.error('Check your Twitter app permissions and regenerate access tokens with read+write scope.');
+          break;
+        }
       }
     }
 
     console.log(`\nDone. Posted ${posted} new receipts.`);
+
+    if (!DRY_RUN && toPost > 0 && posted === 0) {
+      process.exit(1);
+    }
   } finally {
     if (browser) await browser.close();
     (await server).close();
