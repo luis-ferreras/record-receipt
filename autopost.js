@@ -250,7 +250,7 @@ async function main() {
   const history = loadHistory();
 
   // Start local server to serve the site
-  const server = startServer();
+  const server = await startServer();
   console.log(`Local server started on port ${PORT}`);
 
   let browser;
@@ -310,7 +310,7 @@ async function main() {
     }
   } finally {
     if (browser) await browser.close();
-    (await server).close();
+    server.close();
   }
 }
 
