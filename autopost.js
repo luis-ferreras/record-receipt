@@ -187,7 +187,7 @@ function composeTweet(receipt) {
 function isAuthError(err) {
   const code = err.code || err.data?.detail?.status;
   const twitterCode = err.data?.errors?.[0]?.code;
-  return code === 401 || code === 403 || twitterCode === 261 || twitterCode === 89;
+  return code === 401 || code === 403 || twitterCode === 215 || twitterCode === 261 || twitterCode === 89;
 }
 
 async function postToTwitter(client, receipt) {
